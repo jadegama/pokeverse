@@ -274,39 +274,59 @@ else:
 
             if len(evolucoes) > 1:
 
-                colunas = st.columns((len(evolucoes) * 2) - 1)
-
-                coluna_index = 0
+                evolucao_html = """
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:18px;
+                    overflow-x:auto;
+                    padding:20px 5px;
+                    margin-top:10px;
+                ">
+                """
 
                 for i, evo in enumerate(evolucoes):
 
-                    with colunas[coluna_index]:
+                    imagem_evo = evo["imagem"]
+                    nome_evo = evo["nome"]
 
-                        if evo["imagem"]:
-                            st.image(evo["imagem"], width=120)
-
-                        st.markdown(
-                            f"<h4 style='text-align:center'>{evo['nome']}</h4>",
-                            unsafe_allow_html=True
-                        )
-
-                    coluna_index += 1
+                    evolucao_html += f"""
+                    <div style="
+                        min-width:120px;
+                        text-align:center;
+                    ">
+                        <img src="{imagem_evo}" style="
+                            width:100px;
+                            height:100px;
+                            object-fit:contain;
+                        ">
+                        <div style="
+                            font-weight:bold;
+                            font-size:16px;
+                            margin-top:8px;
+                            white-space:nowrap;
+                            color:white;
+                        ">
+                            {nome_evo}
+                        </div>
+                    </div>
+                    """
 
                     if i < len(evolucoes) - 1:
-
-                        with colunas[coluna_index]:
-
-                            st.markdown("""
-                            <h1 style="
-                                text-align:center;
-                                margin-top:45px;
-                                color:#facc15;
-                            ">
+                        evolucao_html += """
+                        <div style="
+                            font-size:36px;
+                            color:#facc15;
+                            font-weight:bold;
+                            padding-bottom:25px;
+                        ">
                             ➜
-                            </h1>
-                            """, unsafe_allow_html=True)
+                        </div>
+                        """
 
-                        coluna_index += 1
+                evolucao_html += "</div>"
+
+                st.markdown(evolucao_html, unsafe_allow_html=True)
 
             else:
 
