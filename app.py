@@ -4,6 +4,7 @@ import random
 from PIL import Image
 from PIL import ImageEnhance
 from io import BytesIO
+import base64
 
 cores_tipos = {
     "fire": "#F08030",
@@ -83,25 +84,25 @@ p, label, div {
     background-color: #facc15;
 }
 
-/* REMOVE TEXTO "PRESS ENTER TO APPLY" */
 [data-testid="InputInstructions"] {
     display: none !important;
 }
-
-/* REMOVE ÍCONE DE TELA CHEIA DE TODAS AS IMAGENS */
-button[title="View fullscreen"],
-[data-testid="StyledFullScreenButton"],
-[data-testid="stImage"] button,
-[data-testid="stImage"] [role="button"],
-div[data-testid="stImage"] button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
+
+def mostrar_imagem(url, largura=250):
+    st.markdown(f"""
+    <div style="text-align:center;">
+        <img src="{url}" width="{largura}" style="object-fit:contain;">
+    </div>
+    """, unsafe_allow_html=True)
+
+def mostrar_sombra(url, largura=250):
+    st.markdown(f"""
+    <div style="text-align:center;">
+        <img src="{url}" width="{largura}" style="object-fit:contain; filter: brightness(0);">
+    </div>
+    """, unsafe_allow_html=True)
 
 if "nome_jogador" not in st.session_state:
     st.session_state.nome_jogador = ""
@@ -248,7 +249,7 @@ else:
 
             st.divider()
 
-            st.image(imagem, width=300)
+            mostrar_imagem(imagem, 300)
 
             st.markdown(f"# {nome}")
 
@@ -278,39 +279,52 @@ else:
 
             if len(evolucoes) > 1:
 
+                cols = st.columns((len(evolucoes) * 2) - 1)
+
+                col_index = 0
+
                 for i, evo in enumerate(evolucoes):
 
-                    col_img, col_nome = st.columns([1, 3])
+                    with cols[col_index]:
 
-                    with col_img:
-                        if evo["imagem"]:
-                            st.image(evo["imagem"], width=90)
-
-                    with col_nome:
                         st.markdown(f"""
                         <div style="
-                            font-size:22px;
-                            font-weight:bold;
-                            margin-top:25px;
-                            white-space:nowrap;
+                            text-align:center;
+                            padding:10px;
                         ">
-                            {evo["nome"]}
+                            <img src="{evo['imagem']}" width="110" style="object-fit:contain;">
+
+                            <div style="
+                                margin-top:10px;
+                                font-size:18px;
+                                font-weight:bold;
+                                white-space:nowrap;
+                                color:white;
+                            ">
+                                {evo['nome']}
+                            </div>
                         </div>
                         """, unsafe_allow_html=True)
 
+                    col_index += 1
+
                     if i < len(evolucoes) - 1:
-                        st.markdown("""
-                        <div style="
-                            text-align:center;
-                            font-size:38px;
-                            color:#facc15;
-                            font-weight:bold;
-                            margin-top:-5px;
-                            margin-bottom:5px;
-                        ">
-                            ↓
-                        </div>
-                        """, unsafe_allow_html=True)
+
+                        with cols[col_index]:
+
+                            st.markdown("""
+                            <div style="
+                                text-align:center;
+                                font-size:45px;
+                                color:#facc15;
+                                margin-top:40px;
+                                font-weight:bold;
+                            ">
+                                ➜
+                            </div>
+                            """, unsafe_allow_html=True)
+
+                        col_index += 1
 
             else:
 
@@ -351,7 +365,7 @@ else:
             for tipo in data_dia["types"]
         ]
 
-        st.image(imagem_dia, width=250)
+        mostrar_imagem(imagem_dia, 250)
 
         st.markdown(f"## {nome_dia}")
 
@@ -407,22 +421,13 @@ else:
 
         imagem_misterio = data_misterio["sprites"]["other"]["official-artwork"]["front_default"]
 
-        img_response = requests.get(imagem_misterio)
-
-        img = Image.open(BytesIO(img_response.content))
-
-        shadow = ImageEnhance.Brightness(img).enhance(0)
-
         st.markdown("""
         <h2 style="text-align:center; color:white; margin-top:20px;">
         ❓ Quem é esse Pokémon?
         </h2>
         """, unsafe_allow_html=True)
 
-        col1, col2, col3 = st.columns([1, 2, 1])
-
-        with col2:
-            st.image(shadow, width=250)
+        mostrar_sombra(imagem_misterio, 250)
 
         st.markdown("""
         <p style="text-align:center; font-size:18px; margin-top:10px;">
@@ -460,7 +465,7 @@ else:
 
         if st.button("🎉 Revelar Pokémon"):
 
-            st.image(imagem_misterio, width=250)
+            mostrar_imagem(imagem_misterio, 250)
 
             st.success(f"É o {nome_misterio}!")
 
