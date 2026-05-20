@@ -88,14 +88,18 @@ p, label, div {
     display: none !important;
 }
 
-/* REMOVE ÍCONE DE TELA CHEIA DAS IMAGENS */
-button[title="View fullscreen"] {
+/* REMOVE ÍCONE DE TELA CHEIA DE TODAS AS IMAGENS */
+button[title="View fullscreen"],
+[data-testid="StyledFullScreenButton"],
+[data-testid="stImage"] button,
+[data-testid="stImage"] [role="button"],
+div[data-testid="stImage"] button {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
-[data-testid="StyledFullScreenButton"] {
-    display: none !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -274,59 +278,39 @@ else:
 
             if len(evolucoes) > 1:
 
-                evolucao_html = """
-                <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:18px;
-                    overflow-x:auto;
-                    padding:20px 5px;
-                    margin-top:10px;
-                ">
-                """
-
                 for i, evo in enumerate(evolucoes):
 
-                    imagem_evo = evo["imagem"]
-                    nome_evo = evo["nome"]
+                    col_img, col_nome = st.columns([1, 3])
 
-                    evolucao_html += f"""
-                    <div style="
-                        min-width:120px;
-                        text-align:center;
-                    ">
-                        <img src="{imagem_evo}" style="
-                            width:100px;
-                            height:100px;
-                            object-fit:contain;
-                        ">
+                    with col_img:
+                        if evo["imagem"]:
+                            st.image(evo["imagem"], width=90)
+
+                    with col_nome:
+                        st.markdown(f"""
                         <div style="
+                            font-size:22px;
                             font-weight:bold;
-                            font-size:16px;
-                            margin-top:8px;
+                            margin-top:25px;
                             white-space:nowrap;
-                            color:white;
                         ">
-                            {nome_evo}
+                            {evo["nome"]}
                         </div>
-                    </div>
-                    """
+                        """, unsafe_allow_html=True)
 
                     if i < len(evolucoes) - 1:
-                        evolucao_html += """
+                        st.markdown("""
                         <div style="
-                            font-size:36px;
+                            text-align:center;
+                            font-size:38px;
                             color:#facc15;
                             font-weight:bold;
-                            padding-bottom:25px;
+                            margin-top:-5px;
+                            margin-bottom:5px;
                         ">
-                            ➜
+                            ↓
                         </div>
-                        """
-
-                evolucao_html += "</div>"
-
-                st.markdown(evolucao_html, unsafe_allow_html=True)
+                        """, unsafe_allow_html=True)
 
             else:
 
