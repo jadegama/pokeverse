@@ -288,36 +288,13 @@ else:
                     imagem_evo = evo["imagem"]
                     nome_evo = evo["nome"]
 
-                    st.markdown(f"""
-                    <div style="
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        gap:20px;
-                        margin:15px auto;
-                        background-color:#1e293b;
-                        padding:15px;
-                        border-radius:18px;
-                        border:1px solid #334155;
-                        max-width:420px;
-                    ">
-                        <img src="{imagem_evo}" style="
-                            width:95px;
-                            height:95px;
-                            object-fit:contain;
-                            background:transparent;
-                        ">
-
-                        <div style="
-                            font-size:24px;
-                            font-weight:bold;
-                            color:white;
-                            white-space:nowrap;
-                        ">
-                            {nome_evo}
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown(
+    f"<div style='display:flex; align-items:center; justify-content:center; gap:20px; margin:15px auto; background-color:#1e293b; padding:15px; border-radius:18px; border:1px solid #334155; max-width:420px;'>"
+    f"<img src='{imagem_evo}' style='width:95px; height:95px; object-fit:contain; background:transparent;'>"
+    f"<span style='font-size:24px; font-weight:bold; color:white; white-space:nowrap;'>{nome_evo}</span>"
+    f"</div>",
+                    unsafe_allow_html=True
+)
 
                     if i < len(evolucoes) - 1:
 
