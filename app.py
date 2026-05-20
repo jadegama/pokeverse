@@ -49,6 +49,10 @@ p, label, div {
     color: white !important;
 }
 
+img {
+    background: transparent !important;
+}
+
 .stTextInput input {
     background-color: #1e293b;
     color: white !important;
@@ -279,52 +283,62 @@ else:
 
             if len(evolucoes) > 1:
 
-                cols = st.columns((len(evolucoes) * 2) - 1)
-
-                col_index = 0
+                evolucao_html = """
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:14px;
+                    overflow-x:auto;
+                    padding:15px 0;
+                    width:100%;
+                ">
+                """
 
                 for i, evo in enumerate(evolucoes):
 
-                    with cols[col_index]:
-
-                        st.markdown(f"""
-                        <div style="
-                            text-align:center;
-                            padding:10px;
+                    evolucao_html += f"""
+                    <div style="
+                        min-width:110px;
+                        text-align:center;
+                        flex-shrink:0;
+                    ">
+                        <img src="{evo['imagem']}" style="
+                            width:95px;
+                            height:95px;
+                            object-fit:contain;
+                            display:block;
+                            margin:0 auto;
+                            background:transparent;
                         ">
-                            <img src="{evo['imagem']}" width="110" style="object-fit:contain;">
-
-                            <div style="
-                                margin-top:10px;
-                                font-size:18px;
-                                font-weight:bold;
-                                white-space:nowrap;
-                                color:white;
-                            ">
-                                {evo['nome']}
-                            </div>
+                        <div style="
+                            font-size:15px;
+                            font-weight:bold;
+                            color:white;
+                            white-space:nowrap;
+                            margin-top:6px;
+                        ">
+                            {evo['nome']}
                         </div>
-                        """, unsafe_allow_html=True)
-
-                    col_index += 1
+                    </div>
+                    """
 
                     if i < len(evolucoes) - 1:
 
-                        with cols[col_index]:
+                        evolucao_html += """
+                        <div style="
+                            font-size:34px;
+                            color:#facc15;
+                            font-weight:bold;
+                            flex-shrink:0;
+                            margin-bottom:25px;
+                        ">
+                            ➜
+                        </div>
+                        """
 
-                            st.markdown("""
-                            <div style="
-                                text-align:center;
-                                font-size:45px;
-                                color:#facc15;
-                                margin-top:40px;
-                                font-weight:bold;
-                            ">
-                                ➜
-                            </div>
-                            """, unsafe_allow_html=True)
+                evolucao_html += "</div>"
 
-                        col_index += 1
+                st.markdown(evolucao_html, unsafe_allow_html=True)
 
             else:
 
