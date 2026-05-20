@@ -283,62 +283,56 @@ else:
 
             if len(evolucoes) > 1:
 
-                evolucao_html = """
-                <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:14px;
-                    overflow-x:auto;
-                    padding:15px 0;
-                    width:100%;
-                ">
-                """
-
                 for i, evo in enumerate(evolucoes):
 
-                    evolucao_html += f"""
+                    imagem_evo = evo["imagem"]
+                    nome_evo = evo["nome"]
+
+                    st.markdown(f"""
                     <div style="
-                        min-width:110px;
-                        text-align:center;
-                        flex-shrink:0;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        gap:20px;
+                        margin:15px auto;
+                        background-color:#1e293b;
+                        padding:15px;
+                        border-radius:18px;
+                        border:1px solid #334155;
+                        max-width:420px;
                     ">
-                        <img src="{evo['imagem']}" style="
+                        <img src="{imagem_evo}" style="
                             width:95px;
                             height:95px;
                             object-fit:contain;
-                            display:block;
-                            margin:0 auto;
                             background:transparent;
                         ">
+
                         <div style="
-                            font-size:15px;
+                            font-size:24px;
                             font-weight:bold;
                             color:white;
                             white-space:nowrap;
-                            margin-top:6px;
                         ">
-                            {evo['nome']}
+                            {nome_evo}
                         </div>
                     </div>
-                    """
+                    """, unsafe_allow_html=True)
 
                     if i < len(evolucoes) - 1:
 
-                        evolucao_html += """
+                        st.markdown("""
                         <div style="
-                            font-size:34px;
+                            text-align:center;
+                            font-size:42px;
                             color:#facc15;
                             font-weight:bold;
-                            flex-shrink:0;
-                            margin-bottom:25px;
+                            margin:0;
+                            line-height:1;
                         ">
-                            ➜
+                            ↓
                         </div>
-                        """
-
-                evolucao_html += "</div>"
-
-                st.markdown(evolucao_html, unsafe_allow_html=True)
+                        """, unsafe_allow_html=True)
 
             else:
 
